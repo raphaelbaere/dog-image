@@ -2,8 +2,17 @@ import React from 'react';
 import './App.css';
 
 class App extends React.Component {
+  constructor() {
+    super();
+    this.fetchDogImage();
+  }
+
+  state = {
+    isLoading: true,
+    imageUrl: '',
+  };
+
   componentDidMount() {
-    // Implemente sua lógica aqui
   }
 
   shouldComponentUpdate(/* nextProps, nextState */) {
@@ -15,8 +24,29 @@ class App extends React.Component {
     // Implemente sua lógica aqui
   }
 
+  fetchDogImage = async () => {
+    const response = await fetch('https://dog.ceo/api/breeds/image/random');
+    const data = await response.json();
+    const dogUrl = data.message;
+    this.setState({ isLoading: false, imageUrl: dogUrl });
+  };
+
   render() {
-    return <h1>Doguinhos</h1>;
+    const { isLoading, imageUrl } = this.state;
+    return (
+      <div>
+        { isLoading ? <p>Loading...</p> : (
+          <div>
+            <img src={ imageUrl } alt="Doguinho aleatório" />
+            <button
+              type="button"
+              onClick={ this.fetchDogImage }
+            >
+              Novo doguinho!
+            </button>
+          </div>) }
+      </div>
+    );
   }
 }
 
