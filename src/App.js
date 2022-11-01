@@ -15,18 +15,24 @@ class App extends React.Component {
   componentDidMount() {
   }
 
-  shouldComponentUpdate(/* nextProps, nextState */) {
-    // Implemente sua lógica aqui
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.imageUrl.includes('terrier')) {
+      return;
+    }
     return true;
   }
 
   componentDidUpdate() {
-    // Implemente sua lógica aqui
+    const { imageUrl } = this.state;
+    const breed = imageUrl.split('/')[4];
+    alert(breed);
+    localStorage.setItem('imageUrl', imageUrl);
   }
 
   fetchDogImage = async () => {
     const response = await fetch('https://dog.ceo/api/breeds/image/random');
     const data = await response.json();
+    console.log(data);
     const dogUrl = data.message;
     this.setState({ isLoading: false, imageUrl: dogUrl });
   };
